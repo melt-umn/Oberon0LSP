@@ -1,0 +1,6 @@
+specification Oberon0LSP;
+global ide_specification {
+  language_name = oberon0;
+  file_extensions = [oberon0];
+  lsp_jar_name = oberon0.lsp;
+}

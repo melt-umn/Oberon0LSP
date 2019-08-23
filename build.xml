@@ -1,0 +1,164 @@
+<project name='oberon0:lsp' default='dist' basedir='.'>
+  <description>Generated build script for the grammar oberon0:lsp</description>
+
+  <property environment='env'/>
+  <property name='jg' location='/Users/joeblanchard/MELT/silver/generated/'/>
+  <property name='sh' location='/Users/joeblanchard/MELT/silver/'/>
+  <property name='bin' location='${jg}/bin'/>
+  <property name='src' location='${jg}/src'/>
+
+  <path id='lib.classpath'>
+    <pathelement location='${sh}/jars/SilverRuntime.jar' />
+    <pathelement location='${sh}/jars/CopperRuntime.jar' />
+  </path>
+
+  <path id='compile.classpath'>
+    <pathelement location='${src}' />
+    <path refid='lib.classpath'/>
+    <pathelement location='${sh}/jars/CopperCompiler.jar' />
+    <pathelement location='/Users/joeblanchard/MELT/silver/generated/bin/' />
+  </path>
+
+  <taskdef name='copper' classname='edu.umn.cs.melt.copper.ant.CopperAntTask' classpathref='compile.classpath'/>
+
+  <target name='copper'>
+
+    <copper packageName='edu.umn.cs.melt.Oberon0.components.L4' parserName='Parser_edu_umn_cs_melt_Oberon0_components_L4_parse' outputFile='${src}/edu/umn/cs/melt/Oberon0/components/L4/Parser_edu_umn_cs_melt_Oberon0_components_L4_parse.java' useSkin='XML' warnUselessNTs='false' avoidRecompile='true' dump='ERROR_ONLY' dumpFormat='HTML' dumpFile='Parser_edu_umn_cs_melt_Oberon0_components_L4_parse.copperdump.html'>
+      <inputs file='${src}/edu/umn/cs/melt/Oberon0/components/L4/Parser_edu_umn_cs_melt_Oberon0_components_L4_parse.copper'/>
+    </copper>
+
+    <copper packageName='lib.lsp.json' parserName='Parser_lib_lsp_json_jsonParser' outputFile='${src}/lib/lsp/json/Parser_lib_lsp_json_jsonParser.java' useSkin='XML' warnUselessNTs='false' avoidRecompile='true' dump='ERROR_ONLY' dumpFormat='HTML' dumpFile='Parser_lib_lsp_json_jsonParser.copperdump.html'>
+      <inputs file='${src}/lib/lsp/json/Parser_lib_lsp_json_jsonParser.copper'/>
+    </copper>
+  </target>
+
+  <target name='init'>
+    <tstamp>
+      <format property='TIME' pattern='yyyy.MM.dd.HH.mm.ss'/>
+    </tstamp>
+    <mkdir dir='${bin}'/>
+  </target>
+
+  <target name='dist' depends='jars'>
+  </target>
+
+  <target name='jars' depends='grammars'>
+    <pathconvert refid='lib.classpath' pathsep=' ' property='man.classpath'>
+      <filtermapper><replacestring from=' ' to='%20' /></filtermapper>
+    </pathconvert>
+    <jar destfile='oberon0.lsp.jar' zip64Mode='as-needed'>
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='oberon0/lsp/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='silver/util/raw/treemap/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/components/L5/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='silver/langutil/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='core/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/components/L4/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='silver/langutil/pp/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='core/reflect/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/codeAction/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/codeLens/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/color/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/completion/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/constants/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/diagnostic/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/document/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/document/highlight/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/document/link/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/document/synchronization/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/executeCommand/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/files/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/folding/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/formatting/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/hover/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/goTo/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/initialization/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/json/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/messages/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/references/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/registration/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/rename/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/shutdown/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/signatureHelp/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/symbols/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='lib/lsp/workspace/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='core/monad/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/core/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/constructs/controlFlow/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/constructs/procedures/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/constructs/dataStructures/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='silver/util/deque/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/core/concreteSyntax/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/core/abstractSyntax/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/constructs/controlFlow/concreteSyntax/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/constructs/controlFlow/abstractSyntax/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/constructs/procedures/abstractSyntax/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/constructs/procedures/concreteSyntax/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/constructs/dataStructures/abstractSyntax/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='edu/umn/cs/melt/Oberon0/constructs/dataStructures/concreteSyntax/*.class' />
+      <fileset dir='/Users/joeblanchard/MELT/silver/generated/bin/' includes='silver/util/treemap/*.class' />
+      <manifest>
+        <attribute name='Built-By' value='${user.name}' />
+        <attribute name='Implementation-Version' value='${TIME}' />
+        <attribute name='Main-Class' value='oberon0.lsp.Main' />
+      </manifest>
+      <zipfileset src='${sh}/jars/SilverRuntime.jar' excludes='META-INF/*' />
+      <zipfileset src='${sh}/jars/CopperRuntime.jar' excludes='META-INF/*' />
+    </jar>
+  </target>
+
+  <target name='grammars' depends='init, copper'>
+    <javac debug='on' classpathref='compile.classpath' srcdir='${src}' destdir='${bin}' includeantruntime='false'>
+      <include name='silver/util/deque/*.java' />
+      <include name='core/monad/*.java' />
+      <include name='core/reflect/*.java' />
+      <include name='silver/util/treemap/*.java' />
+      <include name='silver/langutil/pp/*.java' />
+      <include name='silver/util/raw/treemap/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/components/L5/*.java' />
+      <include name='silver/langutil/*.java' />
+      <include name='lib/lsp/*.java' />
+      <include name='core/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/components/L4/*.java' />
+      <include name='lib/lsp/codeAction/*.java' />
+      <include name='lib/lsp/codeLens/*.java' />
+      <include name='lib/lsp/color/*.java' />
+      <include name='lib/lsp/completion/*.java' />
+      <include name='lib/lsp/constants/*.java' />
+      <include name='lib/lsp/diagnostic/*.java' />
+      <include name='lib/lsp/document/*.java' />
+      <include name='lib/lsp/document/highlight/*.java' />
+      <include name='lib/lsp/document/link/*.java' />
+      <include name='lib/lsp/document/synchronization/*.java' />
+      <include name='lib/lsp/executeCommand/*.java' />
+      <include name='lib/lsp/files/*.java' />
+      <include name='lib/lsp/folding/*.java' />
+      <include name='lib/lsp/formatting/*.java' />
+      <include name='lib/lsp/hover/*.java' />
+      <include name='lib/lsp/goTo/*.java' />
+      <include name='lib/lsp/initialization/*.java' />
+      <include name='lib/lsp/json/*.java' />
+      <include name='lib/lsp/messages/*.java' />
+      <include name='lib/lsp/references/*.java' />
+      <include name='lib/lsp/registration/*.java' />
+      <include name='lib/lsp/rename/*.java' />
+      <include name='lib/lsp/shutdown/*.java' />
+      <include name='lib/lsp/signatureHelp/*.java' />
+      <include name='lib/lsp/symbols/*.java' />
+      <include name='lib/lsp/workspace/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/core/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/constructs/controlFlow/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/constructs/procedures/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/constructs/dataStructures/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/core/concreteSyntax/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/core/abstractSyntax/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/constructs/controlFlow/concreteSyntax/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/constructs/controlFlow/abstractSyntax/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/constructs/procedures/abstractSyntax/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/constructs/procedures/concreteSyntax/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/constructs/dataStructures/abstractSyntax/*.java' />
+      <include name='edu/umn/cs/melt/Oberon0/constructs/dataStructures/concreteSyntax/*.java' />
+      <include name='oberon0/lsp/*.java' />
+    </javac>
+  </target>
+</project>
