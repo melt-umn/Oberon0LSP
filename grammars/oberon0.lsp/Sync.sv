@@ -46,7 +46,7 @@ State ::= state::State input::DidSaveTextDocumentNotification io::IO
 {
   local fileSaved::String = input.didSaveTextDocumentParams.documentId.uri;
   -- we know this is fromJust from what we sent in our initial response
-  local fileText::String = input.didSaveTextDocumentParams.contentWhenSaved.fromJust;
+  local fileText::String = unescapeString(unescapeString(input.didSaveTextDocumentParams.contentWhenSaved.fromJust));
   -- update or create the document
   local newDoc :: LSPDocument = updateOrCreateDocument(fileSaved, fileText, state);
 

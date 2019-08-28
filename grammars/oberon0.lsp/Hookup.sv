@@ -7,7 +7,11 @@ LSP_Interface ::=
 {
   requestHandlers <- [
     initializeRequestHandler(handleInitializeRequest),
-    willSaveWaitUntilRequestHandler(handleWillSaveWaitUntilRequest)  
+    willSaveWaitUntilRequestHandler(handleWillSaveWaitUntilRequest),
+    findReferencesRequestHandler(handleFindReferences),
+    gotoDefinitionHandler(handleGoToDef),
+    hoverRequestHandler(handleHover),
+    completionRequestHandler(handleCompletion)
   ];
   notificationHandlers <- [
     didOpenNotificationHandler(handleDidOpenNotification),
@@ -29,13 +33,13 @@ Pair<State InitializeResult> ::= state::State input::InitializeRequest io::IO
          just(true),
          just(true),
          just(saveOptions(just(true))))),
-       nothing(), -- hover capabilities: Maybe<Boolean>
-       nothing(), -- completion capabilities: Maybe<CompletionOptions>
+       just(true), -- hover capabilities: Maybe<Boolean>
+       just(completionOptions(just(false), nothing())), -- completion capabilities: Maybe<CompletionOptions>
        nothing(), -- signature help capabilities: Maybe<SignatureHelpOptions>
-       nothing(), -- goto definition support: Maybe<Boolean>
+       just(true), -- goto definition support: Maybe<Boolean>
        nothing(), -- goto type definition support: Maybe<Boolean>
        nothing(), -- goto implementation support: Maybe<Boolean>
-       nothing(), -- find references support: Maybe<Boolean>
+       just(true), -- find references support: Maybe<Boolean>
        nothing(), -- document highlight support: Maybe<Boolean>
        nothing(), -- workspace symbol support: Maybe<Boolean>
        nothing(), -- code action support: Maybe<Boolean>

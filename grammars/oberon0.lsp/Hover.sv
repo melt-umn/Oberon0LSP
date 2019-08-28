@@ -10,10 +10,23 @@ Pair<State HoverResult> ::= state::State input::HoverRequest io::IO
 
   local translation :: String = ast.fromJust.lifted.cTrans;
 
-  local hoverObj :: Hover = hover(translation, nothing());
+  local hoverObj :: Hover = hover(escapeString(translation), nothing());
+
+  local logMessageText :: String =
+  if !docM.isJust
+  then "No file " ++ file ++ " on server side on hover request"
+  else if !ast.isJust 
+  then "No valid AST"
+  else "Everything is valid for the hover request";
+                                                                              
+  local logNotif :: LogMessageNotification = logMessageNotification(            
+    logMessageParams(messageTypeLog(), logMessageText));  
+
+  local newState :: State = 
+    stateNewServerInitiatedMessages([serverInitiatedLogMessage(logNotif)], state);
 
   return 
   if docM.isJust && ast.isJust 
-  then pair(state, hoverResultHover(hoverObj)
-  else pair(state, nullHoverResult());
+  then pair(newState, hoverResultHover(hoverObj))
+  else pair(newState, nullHoverResult());
 }

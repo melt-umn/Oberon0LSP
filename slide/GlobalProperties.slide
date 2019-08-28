@@ -1,0 +1,6 @@
+specification Oberon0Globals;
+global ide_specification {
+  language_name = oberon0;
+  file_extensions = [oberon0];
+  treesitter_parser = @joeblanchard/tree-sitter-oberon0;
+}

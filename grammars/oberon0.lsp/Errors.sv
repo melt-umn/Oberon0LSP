@@ -1,0 +1,1 @@
+-- see Sync.sv handleDidSaveNotification to see how error messages are handled

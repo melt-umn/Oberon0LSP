@@ -3,4 +3,5 @@
 set -eu
 
 silver -I grammars -I ../Oberon0 --one-jar oberon0:lsp
+hook-into-genericLanguageServer oberon0.lsp.jar
 

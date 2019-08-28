@@ -1,2 +1,8 @@
 *.jar
 build.xml
+AtomPackageLSPMain.js
+ConflictsDump.xml
+oberon0.cson
+grammarWithoutConflicts.js
+ideInterface.txt
+modified_copper.xml

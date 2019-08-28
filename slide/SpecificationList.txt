@@ -1,1 +1,3 @@
 Oberon0LSP;
+Oberon0Globals;
+Oberon0Highlighting;

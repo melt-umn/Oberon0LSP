@@ -26,7 +26,7 @@ top::LSPDocument ::= docName::String docText::String
   top.docName = docName;
   top.docText = docText;
 
-  local parseAttempt :: ParseResult<Module_c> = parse(docText, docName);
+  local parseAttempt :: ParseResult<Module_c> = parse(unescapeString(docText), docName);
 
   -- this is lazy and won't actually parse anything until we try to 
   -- do something with it for the first time. Nice!

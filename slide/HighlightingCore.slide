@@ -1,0 +1,115 @@
+specification Oberon0Highlighting;
+ide_specification for edu:umn:cs:melt:Oberon0:core:concreteSyntax {
+  terminal Or_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal And_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal EQ_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal NEQ_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal GT_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal LT_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal GTEQ_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal LTEQ_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal Plus_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal Minus_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal Multiply_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal Divide_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal Modulo_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal Not_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal Assign_t {
+    atomMarkupName = keyword.operator;
+  };
+
+  terminal Begin_kwd {
+    atomMarkupName = keyword.control;
+  };
+
+  terminal End_kwd {
+    atomMarkupName = keyword.control;
+  };
+
+  terminal Then_kwd {
+    atomMarkupName = keyword.control;
+  };
+
+  terminal Else_kwd {
+    atomMarkupName = keyword.control;
+  };
+
+  terminal Elseif_kwd {
+    atomMarkupName = keyword.control;
+  };
+
+  terminal While_kwd {
+    atomMarkupName = keyword.control;
+  };
+
+  terminal Do_kwd {
+    atomMarkupName = keyword.control;
+  };
+
+  terminal Num_t {
+    atomMarkupName = constant.numeric;
+  };
+
+  terminal Const_kwd {
+    atomMarkupName = storage.type;
+  };
+
+  terminal Type_kwd {
+    atomMarkupName = storage.type;
+  };
+
+  terminal Var_kwd {
+    atomMarkupName = storage.type;
+  };
+
+  terminal Module_kwd {
+    atomMarkupName = storage.type;
+  };
+
+  terminal Comment {
+    atomMarkupName = comment.block;
+    highlightable;
+  };
+}

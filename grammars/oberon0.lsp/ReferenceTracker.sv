@@ -3,11 +3,11 @@
 import silver:util:raw:treemap as rtm;
 
 synthesized attribute referenceContribs :: [Reference] occurs on 
-  Name, TypeName, Decl, IdList, LExpr, Expr, Stmt, TypeExpr, Module, 
-  Cases, Case, CaseLabels, CaseLabel;
+  Name, TypeName, Decl, LExpr, Expr, Stmt, TypeExpr, Module, 
+  Cases, Case, CaseLabels, CaseLabel, Exprs;
 synthesized attribute defContribs :: [Definition] occurs on 
-  Name, TypeName, Decl, IdList, LExpr, Expr, Stmt, TypeExpr, Module, 
-  Cases, Case, CaseLabels, CaseLabel;
+  Name, TypeName, Decl, LExpr, Expr, Stmt, TypeExpr, Module, 
+  Cases, Case, CaseLabels, CaseLabel, Exprs;
 
 synthesized attribute names :: [String] occurs on Module;
 
@@ -40,8 +40,8 @@ top::Definition ::= name::String defLoc::Location
 aspect production module
 m::Module ::= id::Name ds::Decl ss::Stmt endid::Name
 {
-  m.referenceContribs = id.referenceContribs ++ ds.referenceContribs ++ ss.referenceContribs;
-  m.defContribs = [definition(id.name, id.location)] ++ ds.defContribs ++ ss.defContribs;
+  m.referenceContribs = referenceP(id.name, id.location, id.location) :: ds.referenceContribs ++ ss.referenceContribs;
+  m.defContribs = definition(id.name, id.location) :: ds.defContribs ++ ss.defContribs;
   m.names = map((.name), m.defContribs);
 }
 
@@ -76,45 +76,37 @@ d::Decl ::=
 aspect production constDecl
 d::Decl ::= id::Name e::Expr
 {
-  d.defContribs = [definition(id.name, id.location)] ++ e.defContribs;
-  d.referenceContribs = id.referenceContribs ++ e.referenceContribs;
+  d.defContribs = definition(id.name, id.location) :: e.defContribs;
+  d.referenceContribs = referenceP(id.name, id.location, id.location) :: e.referenceContribs;
 }
 
 aspect production typeDecl
 d::Decl ::= id::TypeName t::TypeExpr
 {
-  d.defContribs = [definition(id.name, id.location)] ++ t.defContribs;
-  d.referenceContribs = id.referenceContribs ++ t.referenceContribs;
+  d.defContribs = definition(id.name, id.location) :: t.defContribs;
+  d.referenceContribs = referenceP(id.name, id.location, id.location) :: t.referenceContribs;
 }
 
 aspect production varDecl
 d::Decl ::= id::Name t::TypeExpr
 {
-  d.defContribs = [definition(id.name, id.location)] ++ t.defContribs;
-  d.referenceContribs = id.referenceContribs ++ t.referenceContribs;
+  d.defContribs = definition(id.name, id.location) :: t.defContribs;
+  d.referenceContribs = referenceP(id.name, id.location, id.location) :: t.referenceContribs;
 }
 
 aspect production varDecls
 d::Decl ::= ids::IdList t::TypeExpr
 {
-  d.defContribs = ids.defContribs;
-  d.referenceContribs = ids.referenceContribs;
+  d.defContribs = ids.idVarDecls.defContribs ++ t.defContribs;
+  d.referenceContribs = (decorate ids.idVarDecls with {env = d.env;}).referenceContribs ++ t.referenceContribs;
 }
 
-aspect production idListOne
-ids::IdList ::= id::Name
+aspect production seqDecl
+d::Decl ::= d1::Decl d2::Decl
 {
-  ids.referenceContribs = id.referenceContribs;
-  ids.defContribs = [definition(id.name, id.location)];
+  d.referenceContribs = d1.referenceContribs ++ d2.referenceContribs;
+  d.defContribs = d1.defContribs ++ d2.defContribs;
 }
-
-aspect production idListCons
-ids::IdList ::= id::Name rest::IdList
-{
-  ids.referenceContribs = id.referenceContribs ++ rest.referenceContribs;
-  ids.defContribs = definition(id.name, id.location) :: rest.defContribs;
-}
-
 -- EXPRESSIONS
 
 aspect production idAccess
@@ -250,6 +242,19 @@ t::TypeExpr ::= id::TypeName
   t.defContribs = id.defContribs;
 }
 
+aspect production integerTypeExpr
+t::TypeExpr ::=
+{
+  t.referenceContribs = [];
+  t.defContribs = [];
+}
+
+aspect production booleanTypeExpr
+t::TypeExpr ::=
+{
+  t.referenceContribs = [];
+  t.defContribs = [];
+}
 
 -- STATEMENTS 
 aspect production seqStmt
@@ -278,12 +283,14 @@ aspect production cond
 s::Stmt ::= c::Expr t::Stmt e::Stmt
 {
   s.referenceContribs = c.referenceContribs ++ t.referenceContribs ++ e.referenceContribs;
+  s.defContribs = c.defContribs ++ t.defContribs ++ e.defContribs;
 }
 
 aspect production while
 s::Stmt ::= con::Expr body::Stmt
 {
   s.referenceContribs = con.referenceContribs ++ body.referenceContribs;
+  s.defContribs = con.defContribs ++ body.defContribs;
 }
 
 
@@ -404,7 +411,7 @@ d::Decl ::= id::Name formals::Decl locals::Decl s::Stmt endid::Name
   d.referenceContribs = id.referenceContribs ++ formals.referenceContribs
     ++ locals.referenceContribs ++ s.referenceContribs;
 
-  d.defContribs = definition(id.name, id.location) :: ++ formals.defContribs
+  d.defContribs = definition(id.name, id.location) :: formals.defContribs
     ++ locals.defContribs ++ s.defContribs;
 }
 
@@ -421,11 +428,8 @@ s::Stmt ::= f::Name a::Exprs
 aspect production nilExprs
 e::Exprs ::=
 {
-  s.referenceContribs = [];
-  s.defContribs = [];
-  e.pp = pp:notext();
-  
- e.errors := [];  --T2
+  e.referenceContribs = [];
+  e.defContribs = [];
 }
 
 aspect production consExprs
@@ -438,19 +442,20 @@ es::Exprs ::= e::Expr rest::Exprs
 aspect production readCall
 s::Stmt ::= f::Name e::Exprs
 {
-  s.referenceContribs = f.referenceContribs ++ a.referenceContribs;
-  s.defContribs = f.defContribs ++ a.defContribs;
+  s.referenceContribs = f.referenceContribs ++ e.referenceContribs;
+  s.defContribs = f.defContribs ++ e.defContribs;
 }
+
 aspect production writeCall
 s::Stmt ::= f::Name e::Exprs
 {
-  s.referenceContribs = f.referenceContribs ++ a.referenceContribs;
-  s.defContribs = f.defContribs ++ a.defContribs;
+  s.referenceContribs = f.referenceContribs ++ e.referenceContribs;
+  s.defContribs = f.defContribs ++ e.defContribs;
 }
 
 aspect production writeLnCall
 s::Stmt ::= f::Name e::Exprs
 {
-  s.referenceContribs = f.referenceContribs ++ a.referenceContribs;
-  s.defContribs = f.defContribs ++ a.defContribs;
+  s.referenceContribs = f.referenceContribs ++ e.referenceContribs;
+  s.defContribs = f.defContribs ++ e.defContribs;
 }
