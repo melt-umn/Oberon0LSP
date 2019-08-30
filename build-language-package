@@ -1,0 +1,7 @@
+
+cd ../Oberon0
+silver --ide-interface edu:umn:cs:melt:Oberon0:components:L4
+cp ideInterface.txt ../Oberon0LSP/
+cd ../Oberon0LSP
+slide -I slide --atom-language-file ideInterface.txt slide/SpecificationList.txt
+gen-atom-language-package oberon0 joeblanchard

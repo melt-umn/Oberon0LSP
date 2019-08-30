@@ -1,0 +1,7 @@
+#!/bin/bash
+
+apm install atom-ide-ui
+silver -I grammars -I ../Oberon0 --one-jar oberon0:lsp
+slide -I slide --atom-lsp-file ideInterface.txt slide/SpecificationList.txt
+gen-atom-lsp-package oberon0
+hook-into-genericLanguageServer oberon0.lsp.jar

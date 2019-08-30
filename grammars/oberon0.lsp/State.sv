@@ -26,7 +26,7 @@ top::LSPDocument ::= docName::String docText::String
   top.docName = docName;
   top.docText = docText;
 
-  local parseAttempt :: ParseResult<Module_c> = parse(unescapeString(docText), docName);
+  local parseAttempt :: ParseResult<Module_c> = parse(unescapeString(top.docText), docName);
 
   -- this is lazy and won't actually parse anything until we try to 
   -- do something with it for the first time. Nice!
@@ -42,6 +42,16 @@ abstract production lspDocumentNewText
 top::LSPDocument ::= newText::String doc::LSPDocument
 {
   top.docText = newText;
+
+  local parseAttempt :: ParseResult<Module_c> = parse(unescapeString(top.docText), doc.docName);
+
+  -- this is lazy and won't actually parse anything until we try to 
+  -- do something with it for the first time. Nice!
+  top.rootAst = 
+    if parseAttempt.parseSuccess
+    then just(decorate parseAttempt.parseTree.ast with {})
+    else nothing();
+
   top.lastValidAst =
     if top.rootAst.isJust 
     then top.rootAst

@@ -1,3 +1,4 @@
+import edu:umn:cs:melt:Oberon0:constructs:dataStructures:typeChecking;
 
 function handleDidOpenNotification
 State ::= state::State input::DidOpenTextDocumentNotification io::IO
@@ -46,20 +47,24 @@ State ::= state::State input::DidSaveTextDocumentNotification io::IO
 {
   local fileSaved::String = input.didSaveTextDocumentParams.documentId.uri;
   -- we know this is fromJust from what we sent in our initial response
-  local fileText::String = unescapeString(unescapeString(input.didSaveTextDocumentParams.contentWhenSaved.fromJust));
+  local fileText::String = unescapeString(input.didSaveTextDocumentParams.contentWhenSaved.fromJust);
   -- update or create the document
   local newDoc :: LSPDocument = updateOrCreateDocument(fileSaved, fileText, state);
 
   -- try to parse the text
   local parseAttempt :: ParseResult<Module_c> = parse(fileText, fileSaved);
 
+  
+
   local errorsToSend :: [SilverDiagnostic] =
-    if parseAttempt.parseSuccess
+    if parseAttempt.parseSuccess 
     then map((.equivalentDiagnostic), newDoc.rootAst.fromJust.errors)
     else [parseAttempt.parseError.equivalentDiagnostic];
   
   local errorMessages :: [ServerInitiatedMessage] =
-    silverDiagnosticsToServerInitiatedMessages(errorsToSend);
+    if null(errorsToSend)
+    then noErrorsMessageForUris([fileSaved]) --clear errors for file
+    else silverDiagnosticsToServerInitiatedMessages(errorsToSend);
 
   return stateNewServerInitiatedMessages(errorMessages, updateDocumentInState(newDoc, state));
 }

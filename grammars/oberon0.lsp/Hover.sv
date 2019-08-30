@@ -26,7 +26,7 @@ Pair<State HoverResult> ::= state::State input::HoverRequest io::IO
     stateNewServerInitiatedMessages([serverInitiatedLogMessage(logNotif)], state);
 
   return 
-  if docM.isJust && ast.isJust 
+  if docM.isJust && ast.isJust && null(ast.fromJust.errors)
   then pair(newState, hoverResultHover(hoverObj))
   else pair(newState, nullHoverResult());
 }
